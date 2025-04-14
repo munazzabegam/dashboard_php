@@ -1,0 +1,20 @@
+/* admin login  */
+
+
+/* admin_dashboard  */
+.admin-card .card-title {
+    font-size: 1.25rem;
+    color: #343a40;
+  }
+  
+  .admin-card .card-text {
+    font-size: 0.95rem;
+    color: #6c757d;
+  }
+  
+  .admin-card .btn-admin {
+    width: 100%;
+    font-weight: 500;
+  }
+  
+  

@@ -1,39 +1,43 @@
 /restaurant-website
 │
 ├── /admin
-│   ├── dashboard.php             // Admin dashboard (restricted)
+│   ├── admin_dashboard.php             // Admin dashboard (restricted)
 │   ├── manage_orders.php         // Admin can view/update orders
 │   ├── manage_reservations.php   // Admin can manage reservations
 │   ├── add_menu_item.php         // (Optional) Admin adds new food items
 │   ├── logout.php                // Admin logout
+│
+├── /user
+│   ├── login.php                 // User login
+│   ├── signup.php                // User signup
+│   ├── logout.php                // User logout
+│   ├── user_dashboard.php        // ✅ New: User dashboard (premium layout)
+│   ├── order.php                 // ✅ New: View user’s orders
+│   ├── reservation.php           // ✅ New: View/manage reservations
+│   ├── profile.php               // ✅ New: Update user profile
+│
+├── /cart
+│   ├── cart.php                  // User’s cart
+│   └── checkout.php              // Place order (protected)
 │
 ├── /components
 │   ├── header.php                // Shared header with nav (login, cart, etc.)
 │   └── footer.php                // Footer (shared)
 │
 ├── /assets
-│   ├── /images                   // Menu images, etc.
+│   ├── /images                   // Menu images, profile pictures, etc.
 │   └── /css
 │       └── style.css             // All styling (Bootstrap + custom)
 │
 ├── /includes
-│   ├── auth_user.php             // User session protection middleware
-│   ├── auth_admin.php            // Admin session protection middleware
-│   └── functions.php             // Reusable functions (e.g., login check)
-│
-├── /user
-│   ├── login.php                 // User login
-│   ├── signup.php                // User signup
-│   ├── logout.php                // User logout
-│
-├── /cart
-│   ├── cart.php                  // User’s cart
-│   └── checkout.php              // Place order (protected)
+│   ├── auth_user.php             // ✅ Middleware: Protects user-only pages
+│   ├── auth_admin.php            // Middleware: Protects admin-only pages
+│   └── functions.php             // Reusable functions (e.g., getUserOrders)
 │
 ├── index.php                     // Public landing page
 ├── menu.php                      // View menu items (public)
-├── order.php                     // Order food (user must log in)
-├── reservation.php               // Make reservation (user must log in)
+├── order.php                     // Place food order (user login required)
+├── reservation.php               // Make reservation (user login required)
 ├── admin_login.php               // Admin login
-├── admin_signup.php              // (Optional) Admin registration (if allowed)
+├── admin_signup.php              // (Optional) Admin registration
 └── config.php                    // Database connection config

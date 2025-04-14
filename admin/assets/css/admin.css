@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Base Sidebar Styles */
+.admin-sidebar {
+    position: fixed;
+    top: 56px; /* below the navbar */
+    left: 0;
+    height: 100%;
+    width: 250px;
+    background-color: #212529;
+    color: #fff;
+    padding-top: 1rem;
+    transition: all 0.3s ease;
+    transform: translateX(-100%);
+    z-index: 1050; /* higher than navbar */
+  }
+  
+  /* Show sidebar */
+  .admin-sidebar.show {
+    transform: translateX(0);
+  }
+  
+  /* Sidebar nav */
+  .sidebar-nav {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  
+  .sidebar-nav li a {
+    display: block;
+    padding: 12px 20px;
+    color: #ccc;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+  
+  .sidebar-nav li a:hover {
+    background-color: #343a40;
+    color: #fff;
+  }
+  
+  /* Main content */
+  .admin-main {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+    padding-top: 70px;
+  }
+  
+  .admin-main.full-width {
+    margin-left: 250px;
+  }
+  
+  /* Mobile view: Sidebar covers screen */
+  @media (max-width: 768px) {
+    .admin-sidebar {
+      width: 100%;
+      top: 56px;
+      height: calc(100% - 56px); /* full height below navbar */
+    }
+  
+    .admin-main.full-width {
+      margin-left: 0; /* Don't push content on mobile */
+    }
+  }
+  
