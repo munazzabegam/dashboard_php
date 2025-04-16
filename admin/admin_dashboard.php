@@ -28,7 +28,7 @@ if (!isset($_SESSION['admin_id'])) {
 <div class="admin-sidebar" id="adminSidebar">
   <div class="sidebar-logo d-flex justify-content-between align-items-center px-3 py-3">
     <h5 class="text-white mb-0">Admin Panel</h5>
-    <button class="btn text-white d-md-none" id="toggleSidebarClose"><i class="fas fa-times"></i></button>
+    <button class="btn text-white" id="toggleSidebarClose"><i class="fas fa-times"></i></button>
   </div>
   <ul class="sidebar-nav">
     <li><a href="dashboard.php"><i class="fas fa-home me-2"></i>Dashboard</a></li>
@@ -40,11 +40,11 @@ if (!isset($_SESSION['admin_id'])) {
 </div>
 
 <!-- 🔸 HEADER -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-4 shadow-sm">
-  <button class="btn text-white d-md-none" id="toggleSidebarOpen">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 px-4 shadow-sm" id = "adminHeader">
+  <button class="btn text-white " id="toggleSidebarOpen">
     <i class="fas fa-bars fa-lg"></i>
   </button>
-  <span class="navbar-brand ms-3 fw-bold">Welcome <?= $_SESSION['admin_username'] ?? 'Admin'; ?> 👋</span>
+  <span class="navbar-brand ms-3 fw-bold">Welcome <?= $_SESSION['admin_username'] ?? 'Admin'; ?></span>
 </nav>
 
 <!-- 🔹 MAIN CONTENT -->

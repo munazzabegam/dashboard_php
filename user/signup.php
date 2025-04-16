@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'components/header.php';
+include '../components/header.php';
 
 // Check if the user is already logged in (optional)
 if (isset($_SESSION['user_id'])) {
@@ -98,4 +98,4 @@ $conn->close();
   </div>
 <?php endif; ?>
 
-<?php include 'components/footer.php'; ?>
+<?php include '../components/footer.php'; ?>

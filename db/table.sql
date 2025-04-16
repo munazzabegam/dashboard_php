@@ -4,7 +4,7 @@ USE restaurant;
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,  -- Password will be stored hashed
+    password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -13,7 +13,7 @@ CREATE TABLE menu (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
-    image VARCHAR(255),  -- Store image file name or URL
+    image VARCHAR(255),  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -57,7 +57,6 @@ CREATE TABLE admin (
 INSERT INTO users (username, password, role) 
 VALUES ('admin', 'hashed_password_here', 'admin');
 
--- Note: Make sure to hash the password using a PHP function like password_hash() before storing it in the database.
 
 INSERT INTO menu (name, description, price, image) 
 VALUES ('Pizza', 'Delicious cheese pizza', 12.99, 'pizza.jpg'),

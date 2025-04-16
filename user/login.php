@@ -1,10 +1,10 @@
 <?php
 session_start();
-include 'components/header.php';
+include '../components/header.php';
 
 // Check if the user is already logged in (optional)
 if (isset($_SESSION['user_id'])) {
-    header("Location: index.php");  // Redirect if already logged in
+    header("Location: ../index.php");  // Redirect if already logged in
     exit();
 }
 
@@ -84,4 +84,4 @@ $conn->close();
   </div>
 <?php endif; ?>
 
-<?php include 'components/footer.php'; ?>
+<?php include '../components/footer.php'; ?>
