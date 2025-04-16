@@ -1,69 +1,83 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
 }
 
-/* Base Sidebar Styles */
+/* Sidebar */
 .admin-sidebar {
-    position: fixed;
-    top: 56px; /* below the navbar */
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #212529;
-    color: #fff;
-    padding-top: 1rem;
-    transition: all 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: #343a40;
+  color: white;
+  padding-top: 70px;
+  transition: all 0.3s ease;
+  transform: translateX(-100%);
+  z-index: 1050;
+}
+
+.admin-sidebar.show {
+  transform: translateX(0);
+}
+
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-nav li a {
+  display: block;
+  padding: 15px 20px;
+  color: #ccc;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.sidebar-nav li a:hover {
+  background-color: #495057;
+  color: #fff;
+}
+
+/* Main content */
+.admin-main {
+  margin-left: 250px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
     transform: translateX(-100%);
-    z-index: 1050; /* higher than navbar */
+    width: 100%;
   }
-  
-  /* Show sidebar */
+
   .admin-sidebar.show {
     transform: translateX(0);
   }
-  
-  /* Sidebar nav */
-  .sidebar-nav {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-  
-  .sidebar-nav li a {
-    display: block;
-    padding: 12px 20px;
-    color: #ccc;
-    text-decoration: none;
-    transition: background 0.3s;
-  }
-  
-  .sidebar-nav li a:hover {
-    background-color: #343a40;
-    color: #fff;
-  }
-  
-  /* Main content */
+
   .admin-main {
     margin-left: 0;
-    transition: margin-left 0.3s ease;
-    padding-top: 70px;
   }
-  
-  .admin-main.full-width {
-    margin-left: 250px;
-  }
-  
-  /* Mobile view: Sidebar covers screen */
-  @media (max-width: 768px) {
-    .admin-sidebar {
-      width: 100%;
-      top: 56px;
-      height: calc(100% - 56px); /* full height below navbar */
-    }
-  
-    .admin-main.full-width {
-      margin-left: 0; /* Don't push content on mobile */
-    }
-  }
-  
+}
+
+/* Cards */
+.card {
+  border-radius: 12px;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
