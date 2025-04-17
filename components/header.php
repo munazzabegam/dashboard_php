@@ -45,7 +45,7 @@
           <a href="user/user_dashboard.php" class="btn btn-dark me-2">Dashboard</a>
           <a href="user/logout.php" class="btn btn-danger">Logout</a>
         <?php else: ?>
-          <a href="user/login.php" class="btn btn-outline-dark">Login</a>
+          <a href="login.php" class="btn btn-outline-dark">Login</a>
         <?php endif; ?>
       </div>
       </div>
