@@ -39,9 +39,15 @@
 
       <!-- Login / Signup Buttons -->
       <div class="d-flex">
-        <a href="cart.php" class="btn btn-outline-light me-2">Cart 🛒</a>
-        <a href="login.php" class="btn btn-outline-primary me-2">Login</a>
-        <a href="signup.php" class="btn btn-primary">Sign Up</a>
+        <a href="cart.php" class="btn btn-outline-dark me-2">Cart 🛒</a>
+        <div class="d-flex">
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <a href="user/user_dashboard.php" class="btn btn-dark me-2">Dashboard</a>
+          <a href="user/logout.php" class="btn btn-danger">Logout</a>
+        <?php else: ?>
+          <a href="user/login.php" class="btn btn-outline-dark">Login</a>
+        <?php endif; ?>
+      </div>
       </div>
     </div>
   </div>
