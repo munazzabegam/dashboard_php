@@ -59,13 +59,19 @@ $result = $conn->query($sql);
 
         <div class="col-md-4 menu-item" data-category="<?= htmlspecialchars($item_category) ?>">
           <div class="card shadow-sm h-100">
-            <img src="assets/images/<?= htmlspecialchars($item_image) ?>" class="card-img-top" alt="<?= htmlspecialchars($item_name) ?>">
+            <img src="<?= htmlspecialchars($item_image) ?>" class="card-img-top" alt="<?= htmlspecialchars($item_name) ?>">
             <div class="card-body">
               <h5 class="card-title"><?= htmlspecialchars($item_name) ?></h5>
               <p class="card-text"><?= htmlspecialchars($item_description) ?></p>
               <div class="d-flex justify-content-between align-items-center">
                 <span class="fw-bold text-success">₹<?= number_format($item_price, 2) ?></span>
-                <button class="btn btn-primary btn-sm">Add to Cart</button>
+                <button class="btn btn-primary btn-sm add-to-cart" 
+                        data-id="<?= $row['id'] ?>"
+                        data-name="<?= htmlspecialchars($item_name) ?>"
+                        data-price="<?= $item_price ?>"
+                        data-image="<?= htmlspecialchars($item_image) ?>">
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>
@@ -86,9 +92,70 @@ $result = $conn->query($sql);
 </section>
 
 <script>
+  // Cart functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const itemId = this.getAttribute('data-id');
+        const itemName = this.getAttribute('data-name');
+        const itemPrice = this.getAttribute('data-price');
+        const itemImage = this.getAttribute('data-image');
+        
+        // Create cart item object
+        const cartItem = {
+          id: itemId,
+          name: itemName,
+          price: itemPrice,
+          image: itemImage,
+          quantity: 1
+        };
+        
+        // Get existing cart from session storage
+        let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        
+        // Check if item already exists in cart
+        const existingItem = cart.find(item => item.id === itemId);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push(cartItem);
+        }
+        
+        // Save cart back to session storage
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Show success message
+        alert('Item added to cart!');
+        
+        // Update cart count in header if it exists
+        const cartCount = document.querySelector('.cart-count');
+        if (cartCount) {
+          const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+          cartCount.textContent = totalItems;
+        }
+      });
+    });
+  });
+
+  // Filter functionality
   const filterButtons = document.querySelectorAll(".filter-btn");
   const menuItems = document.querySelectorAll(".menu-item");
 
+  // Function to filter menu items
+  function filterMenuItems(category) {
+    menuItems.forEach(item => {
+      const itemCategory = item.getAttribute("data-category").toLowerCase();
+      if (category === "all" || itemCategory === category) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  }
+
+  // Add click event listeners to filter buttons
   filterButtons.forEach(button => {
     button.addEventListener("click", () => {
       // Remove active class from all buttons
@@ -96,17 +163,12 @@ $result = $conn->query($sql);
       button.classList.add("active");
 
       const category = button.getAttribute("data-category");
-
-      menuItems.forEach(item => {
-        const itemCategory = item.getAttribute("data-category");
-        if (category === "all" || itemCategory === category) {
-          item.classList.remove("d-none");
-        } else {
-          item.classList.add("d-none");
-        }
-      });
+      filterMenuItems(category);
     });
   });
+
+  // Initialize with "all" category
+  filterMenuItems("all");
 </script>
 
 <?php include 'components/footer.php'; ?>

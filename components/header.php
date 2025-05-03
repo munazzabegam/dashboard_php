@@ -39,11 +39,13 @@
 
       <!-- Login / Signup Buttons -->
       <div class="d-flex">
-        <a href="cart.php" class="btn btn-outline-dark me-2">Cart 🛒</a>
-        <div class="d-flex">
+      <a href="cart.php" class="btn btn-outline-dark me-2 position-relative">
+          Cart 🛒
+      </a>
+          <div class="d-flex">
         <?php if (isset($_SESSION['user_id'])): ?>
           <a href="user/user_dashboard.php" class="btn btn-dark me-2">Dashboard</a>
-          <a href="user/logout.php" class="btn btn-danger">Logout</a>
+          <a href="logout.php" class="btn btn-danger">Logout</a>
         <?php else: ?>
           <a href="login.php" class="btn btn-outline-dark">Login</a>
         <?php endif; ?>

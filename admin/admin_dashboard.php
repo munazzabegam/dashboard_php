@@ -2,10 +2,10 @@
 session_start();
 include_once("../config.php");
 
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: admin_login.php");
-    exit();
-}
+// if (!isset($_SESSION['admin_id'])) {
+//     header("Location: admin_login.php");
+//     exit();
+// }
 ?>
 
 <!DOCTYPE html>
@@ -85,9 +85,20 @@ if (!isset($_SESSION['admin_id'])) {
       <div class="col-md-4">
         <div class="card shadow admin-card">
           <div class="card-body text-center">
-            <h5 class="card-title">Menu</h5>
-            <p class="card-text">Add or update dishes.</p>
-            <a href="menu.php" class="btn btn-admin">Go</a>
+            <h5 class="card-title">Add Menu Item</h5>
+            <p class="card-text">Add new dishes to the menu.</p>
+            <a href="add_menu.php" class="btn btn-admin">Add New</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manage Menu -->
+      <div class="col-md-4">
+        <div class="card shadow admin-card">
+          <div class="card-body text-center">
+            <h5 class="card-title">Manage Menu</h5>
+            <p class="card-text">View and edit existing menu items.</p>
+            <a href="menu.php" class="btn btn-admin">Manage</a>
           </div>
         </div>
       </div>

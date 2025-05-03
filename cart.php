@@ -21,71 +21,157 @@ if ($conn->connect_error) {
 
 ?>
 
-<!-- Cart Page -->
-<section class="py-5 bg-light">
-  <div class="container" data-aos="fade-up">
-    <h2 class="mb-4 text-center fw-bold">🛒 Your Cart</h2>
-
-    <?php if (!empty($_SESSION['cart'])): ?>
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th>Item</th>
-              <th class="text-center">Quantity</th>
-              <th class="text-end">Price</th>
-              <th class="text-end">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php 
-              $grand_total = 0;
-              // Loop through the cart items
-              foreach ($_SESSION['cart'] as $item_id => $item) {
-                // Fetch item details from the database
-                $sql = "SELECT name, price FROM menu_items WHERE id = $item_id"; // Replace 'menu_items' with your table name
-                $result = $conn->query($sql);
-                
-                if ($result->num_rows > 0) {
-                  $item_details = $result->fetch_assoc();
-                  $item_name = $item_details['name'];
-                  $item_price = $item_details['price'];
-                } else {
-                  $item_name = "Unknown Item";
-                  $item_price = 0;
-                }
-
-                // Calculate the total price for this item
-                $total_price = $item_price * $item['quantity'];
-                $grand_total += $total_price;
-            ?>
-              <tr>
-                <td><?= htmlspecialchars($item_name) ?></td>
-                <td class="text-center"><?= $item['quantity'] ?></td>
-                <td class="text-end">₹<?= number_format($item_price, 2) ?></td>
-                <td class="text-end">₹<?= number_format($total_price, 2) ?></td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-      </div>
-      <div class="d-flex justify-content-between align-items-center mt-4">
-        <h4>Total Amount: ₹<?= number_format($grand_total, 2) ?></h4>
-        <div>
-          <a href="menu.php" class="btn btn-outline-secondary me-2">← Continue Shopping</a>
-          <a href="checkout.php" class="btn btn-success">Proceed to Checkout</a>
+<div class="container py-5">
+    <h2 class="mb-4">Your Cart</h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div id="cart-items">
+                        <!-- Cart items will be loaded here -->
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    <?php else: ?>
-      <div class="alert alert-warning text-center" role="alert">
-        Your cart is currently empty.
-      </div>
-      <div class="text-center">
-        <a href="menu.php" class="btn btn-primary">Browse Menu</a>
-      </div>
-    <?php endif; ?>
-  </div>
-</section>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Order Summary</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax (5%):</span>
+                        <span id="tax">₹0.00</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total:</span>
+                        <span id="total" class="fw-bold">₹0.00</span>
+                    </div>
+                    <button class="btn btn-primary w-100" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadCart();
+});
+
+function loadCart() {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const cartItemsContainer = document.getElementById('cart-items');
+    let subtotal = 0;
+    
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-center">Your cart is empty</p>';
+        updateTotals(0);
+        return;
+    }
+    
+    let html = '';
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        
+        html += `
+            <div class="cart-item mb-3 p-3 border-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <img src="${item.image}" class="img-fluid" alt="${item.name}">
+                    </div>
+                    <div class="col-md-4">
+                        <h6>${item.name}</h6>
+                        <p class="text-muted mb-0">₹${item.price}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <input type="number" class="form-control text-center" value="${item.quantity}" min="1" 
+                                   onchange="updateQuantityInput(${item.id}, this.value)">
+                            <button class="btn btn-outline-secondary" onclick="updateQuantity(${item.id}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <span class="fw-bold">₹${itemTotal.toFixed(2)}</span>
+                    </div>
+                    <div class="col-md-1 text-end">
+                        <button class="btn btn-danger btn-sm" onclick="removeItem(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    cartItemsContainer.innerHTML = html;
+    updateTotals(subtotal);
+}
+
+function updateQuantity(itemId, change) {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const item = cart.find(item => item.id == itemId);
+    
+    if (item) {
+        item.quantity += change;
+        if (item.quantity < 1) item.quantity = 1;
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        loadCart();
+    }
+}
+
+function updateQuantityInput(itemId, newQuantity) {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const item = cart.find(item => item.id == itemId);
+    
+    if (item) {
+        item.quantity = Math.max(1, parseInt(newQuantity));
+        sessionStorage.setItem('cart', JSON.stringify(cart));
+        loadCart();
+    }
+}
+
+function removeItem(itemId) {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const newCart = cart.filter(item => item.id != itemId);
+    sessionStorage.setItem('cart', JSON.stringify(newCart));
+    loadCart();
+    
+    // Update cart count in header
+    const cartCount = document.querySelector('.cart-count');
+    if (cartCount) {
+        const totalItems = newCart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+    }
+}
+
+function updateTotals(subtotal) {
+    const tax = subtotal * 0.05;
+    const total = subtotal + tax;
+    
+    document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+    document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+    document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+}
+
+function proceedToCheckout() {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+    
+    // Redirect to checkout page
+    window.location.href = 'checkout.php';
+}
+</script>
 
 <?php
 // Close the database connection
